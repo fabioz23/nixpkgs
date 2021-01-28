@@ -15,21 +15,21 @@
 , databases
 , pytestCheckHook
 , pytest-asyncio
-, pytestcov
+, pytest-cov
 , typing-extensions
 , ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.13.8";
+  version = "0.14.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "11i0yd8cqwscixajl734g11vf8pghki11c81chzfh8ifmj6mf9jk";
+    sha256 = "sha256-EpT3BZ4XRHLMTMYHqtJpcj8LHeZrz2+MSa2wTj2gH2g=";
   };
 
   propagatedBuildInputs = [
@@ -46,11 +46,15 @@ buildPythonPackage rec {
   checkInputs = [
     aiosqlite
     databases
+    pytest-asyncio
+    pytest-cov
     pytestCheckHook
     typing-extensions
   ];
 
   pytestFlagsArray = [ "--ignore=tests/test_graphql.py" ];
+  # https://github.com/encode/starlette/issues/1131
+  disabledTests = [ "test_debug_html" ];
 
   pythonImportsCheck = [ "starlette" ];
 
