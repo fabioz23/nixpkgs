@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "PyJWT";
-  version = "1.7.1";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
+    sha256 = "sha256-pccKBuHzPYHvJe7NUNUL0w403hyosrn6P+Daqrz2m/c=";
   };
 
   propagatedBuildInputs = [ cryptography ecdsa ];
