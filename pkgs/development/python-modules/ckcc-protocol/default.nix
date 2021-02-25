@@ -4,7 +4,6 @@
 , ecdsa
 , hidapi
 , fetchPypi
-, pytest
 , pyaes
 , pythonOlder
 }:
@@ -19,16 +18,21 @@ buildPythonPackage rec {
     sha256 = "d83a77d94e9563c3fb0e982d847ec88ba6ac45e3e008e5e53729c0b9800097fc";
   };
 
-  checkInputs = [
-    pytest
+  propagatedBuildInputs = [
+    click
+    ecdsa
+    hidapi
+    pyaes
   ];
 
-  propagatedBuildInputs = [ click ecdsa hidapi pyaes ];
+  # Project has no tests
+  doCheck = false;
+  pythonImportsCheck = [ "ckcc" ];
 
   meta = with lib; {
     description = "Communicate with your Coldcard using Python";
     homepage = "https://github.com/Coldcard/ckcc-protocol";
-    license = licenses.gpl3;
+    license = licenses.mit;
     maintainers = [ maintainers.hkjn ];
   };
 }
