@@ -1,6 +1,12 @@
-{ config, stdenv, lib, fetchgit, cmake
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, ncclSupport ? false, nccl
+{ config
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit
+, ncclSupport ? false
+, nccl
 , llvmPackages
 }:
 
@@ -8,22 +14,27 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "xgboost";
-  version = "0.90";
+  version = "1.3.3";
 
-  # needs submodules
-  src = fetchgit {
-    url = "https://github.com/dmlc/xgboost";
-    rev = "refs/tags/v${version}";
-    sha256 = "1zs15k9crkiq7bnr4gqq53mkn3w8z9dq4nwlavmfcr5xr5gw2pw4";
+  src = fetchFromGitHub {
+    owner = "dmlc";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1k9z81hj781vk8psq8hm2zgvsf6x952adx21p4dpzsm616vrwdcz";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
   buildInputs = lib.optional cudaSupport cudatoolkit
                 ++ lib.optional ncclSupport nccl;
 
-  cmakeFlags = lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc" ]
-               ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
+  cmakeFlags = lib.optionals cudaSupport [
+    "-DUSE_CUDA=ON"
+    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    ] ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
 
   installPhase = let
     libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
