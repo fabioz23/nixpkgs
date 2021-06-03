@@ -4675,6 +4675,8 @@ in {
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
+  nsapi = callPackage ../development/python-modules/nsapi { };
+
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
