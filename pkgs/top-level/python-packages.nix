@@ -4260,6 +4260,8 @@ in {
 
   metar = callPackage ../development/python-modules/metar { };
 
+  meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
+
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   micawber = callPackage ../development/python-modules/micawber { };
