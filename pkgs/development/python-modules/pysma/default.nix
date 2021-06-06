@@ -1,19 +1,22 @@
 { lib
 , aiohttp
+, aioresponses
 , attrs
 , buildPythonPackage
 , fetchPypi
 , jmespath
 , async-timeout
+, pytest-aiohttp
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pysma";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vriMnJFS7yfTyDT1f4sx1xEBTQjqc4ZHmkdHp1vcd+Q=";
+    sha256 = "19ffniz82qgc3xbkycsz0yqcpxv8sm2cd70zqhp7xd2xlrdrw3nb";
   };
 
   propagatedBuildInputs = [
@@ -23,8 +26,12 @@ buildPythonPackage rec {
     jmespath
   ];
 
-  # pypi does not contain tests and GitHub archive not available
-  doCheck = false;
+  checkInputs = [
+    aioresponses
+    pytest-aiohttp
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "pysma" ];
 
   meta = with lib; {
