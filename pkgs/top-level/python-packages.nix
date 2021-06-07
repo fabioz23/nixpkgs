@@ -2672,6 +2672,8 @@ in {
     pythonPackages = self;
   });
 
+  garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   gcovr = callPackage ../development/python-modules/gcovr { };
