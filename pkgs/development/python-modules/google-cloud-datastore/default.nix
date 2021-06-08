@@ -6,7 +6,7 @@
 , libcst
 , proto-plus
 , mock
-, pytestCheckHook
+, pytest
 , pytest-asyncio
 , google-cloud-testutils
 }:
@@ -20,14 +20,26 @@ buildPythonPackage rec {
     sha256 = "sha256-56UQdZudVf9jyYPjxCy/XDX5tzEPTWEevjaX2mV2vLQ=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    # We can't use pytestCheckHook here as tests are designed to run with nox
+    # pytestCheckPhase is executed twice otherwise
+    pytest
+    pytest-asyncio
+  ];
 
   preCheck = ''
-    # directory shadows imports
+    # Prevent google directory from shadowing google imports
     rm -r google
-    # requires credentials
+    # Requires credentials
     rm tests/system/test_system.py
   '';
 
