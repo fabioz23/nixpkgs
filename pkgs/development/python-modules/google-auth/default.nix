@@ -10,20 +10,21 @@
 , mock
 , oauth2client
 , pyasn1-modules
+, pyopenssl
 , pytest-localserver
+, pyu2f
 , responses
 , rsa
 , six
-, pyopenssl
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.28.0";
+  version = "1.30.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9bd436d19ab047001a1340720d2b629eb96dd503258c524921ec2af3ee88a80e";
+    sha256 = "sha256-myNdvIduSUVMvtxSrgq9VA73BevM30++k1U7sT8msaQ=";
   };
 
   propagatedBuildInputs = [
@@ -39,8 +40,9 @@ buildPythonPackage rec {
     freezegun
     mock
     oauth2client
-    pytestCheckHook
     pytest-localserver
+    pytestCheckHook
+    pyu2f
     responses
   ];
 
