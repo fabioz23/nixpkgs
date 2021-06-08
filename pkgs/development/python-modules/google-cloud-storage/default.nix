@@ -34,8 +34,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # disable tests which require credentials and network access
   disabledTests = [
+    # disable tests which require credentials and network access
     "create"
     "download"
     "get"
@@ -45,13 +45,13 @@ buildPythonPackage rec {
     "test_open"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=tests/unit/test_bucket.py"
-    "--ignore=tests/system/test_system.py"
+  disabledTestPaths = [
+    "tests/unit/test_bucket.py"
+    "tests/system/test_system.py"
   ];
 
-  # prevent google directory from shadowing google imports
   preCheck = ''
+    # prevent google directory from shadowing google imports
     rm -r google
   '';
 
