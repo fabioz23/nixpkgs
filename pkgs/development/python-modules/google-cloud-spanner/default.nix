@@ -7,7 +7,7 @@
 , libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, pytest
 , pytest-asyncio
 , sqlparse
 }:
@@ -21,14 +21,27 @@ buildPythonPackage rec {
     sha256 = "sha256-8o7pr9msuMfIN7UMX+/gppmD3MWXt2hBqb7vcLUE22M=";
   };
 
-  propagatedBuildInputs = [ google-cloud-core grpc_google_iam_v1 libcst proto-plus sqlparse ];
+  propagatedBuildInputs = [
+    google-cloud-core
+    grpc_google_iam_v1
+    libcst
+    proto-plus
+    sqlparse
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    # We can't use pytestCheckHook here as tests are designed to run with nox
+    # pytestCheckPhase is executed twice otherwise
+    pytest
+    pytest-asyncio
+  ];
 
   preCheck = ''
-    # prevent google directory from shadowing google imports
+    # Prevent google directory from shadowing google imports
     rm -r google
-    # disable tests which require credentials
+    # Disable tests which require credentials
     rm tests/system/test_{system,system_dbapi}.py
     rm tests/unit/spanner_dbapi/test_{connect,connection,cursor}.py
   '';
