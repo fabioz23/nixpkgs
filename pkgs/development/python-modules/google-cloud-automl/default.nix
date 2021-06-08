@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
+, pytest
 , libcst
 , google-api-core
 , google-cloud-storage
@@ -21,7 +21,11 @@ buildPythonPackage rec {
     sha256 = "sha256-UjYzSWtP4cp0p7Is2qIGWBgEhjgTv0YeL0N9D7etIbY=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    proto-plus
+  ];
 
   checkInputs = [
     google-cloud-storage
@@ -29,18 +33,20 @@ buildPythonPackage rec {
     mock
     pandas
     pytest-asyncio
-    pytestCheckHook
+    # We can't use pytestCheckHook here as tests are designed to run with nox
+    # pytestCheckPhase is executed twice otherwise
+    pytest
   ];
 
   preCheck = ''
-    # do not shadow imports
+    # Prevent google directory from shadowing google imports
     rm -r google
-    # requires credentials
+    # Requires credentials
     rm tests/system/gapic/v1beta1/test_system_tables_client_v1.py
   '';
 
   disabledTests = [
-    # requires credentials
+    # Requires credentials
     "test_prediction_client_client_info"
   ];
 
