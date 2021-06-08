@@ -3,11 +3,13 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
+, google-cloud-testutils
 , grpc_google_iam_v1
 , libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, pytest-asyncio
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -28,14 +30,32 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    google-cloud-testutils
     mock
-    pytestCheckHook
+    pytest-asyncio
+    pytest
   ];
 
-  checkPhase = ''
+  prePhase = ''
     # Prevent google directory from shadowing google imports
     rm -r google
   '';
+
+  disabledTestPaths = [
+    # Tests seems outdated
+    "tests/unit/test_app_profile.py"
+    "tests/unit/test_backup.py"
+    "tests/unit/test_batcher.py"
+    "tests/unit/test_client.py"
+    "tests/unit/test_cluster.py"
+    "tests/unit/test_column_family.py"
+    "tests/unit/test_instance.py"
+    "tests/unit/test_row_data.py"
+    "tests/unit/test_row_filters.py"
+    "tests/unit/test_row_set.py"
+    "tests/unit/test_row.py"
+    "tests/unit/test_table.py"
+  ];
 
   disabledTests = [
     "policy"
