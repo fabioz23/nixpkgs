@@ -4,7 +4,7 @@
 , pytestCheckHook
 , google-cloud-logging
 , google-cloud-testutils
-, libcst
+, google-api-core
 , mock
 , proto-plus
 , pytest-asyncio
@@ -24,18 +24,27 @@ buildPythonPackage rec {
       --replace 'google-cloud-logging>=1.14.0, <2.4' 'google-cloud-logging>=1.14.0'
   '';
 
-  propagatedBuildInputs = [ google-cloud-logging libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-cloud-logging
+    google-api-core
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
-    # require credentials
+    # Require credentials
     "test_report_error_event"
     "test_report_exception"
   ];
 
-  # prevent google directory from shadowing google imports
   preCheck = ''
+    # Prevent google directory from shadowing google imports
     rm -r google
   '';
 
