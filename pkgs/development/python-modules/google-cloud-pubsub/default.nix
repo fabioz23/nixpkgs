@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
+, pytest
 , google-api-core
 , google-cloud-testutils
 , grpc_google_iam_v1
@@ -20,12 +20,24 @@ buildPythonPackage rec {
     sha256 = "sha256-hwZVe3FTLHauxIQJ3KwYnKrEfPLey4hQrnVpS/cDJrI=";
   };
 
-  propagatedBuildInputs = [ grpc_google_iam_v1 google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    grpc_google_iam_v1
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    # We can't use pytestCheckHook here as tests are designed to run with nox
+    # pytestCheckPhase is executed twice otherwise
+    pytest
+    pytest-asyncio
+  ];
 
   preCheck = ''
-    # prevent google directory from shadowing google imports
+    # Prevent google directory from shadowing google imports
     rm -r google
     # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
     rm -r tests/unit/pubsub_v1
